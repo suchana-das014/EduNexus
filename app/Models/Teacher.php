@@ -16,6 +16,6 @@ class Teacher extends Model
         'tenant_id',
         'first_name',
         'last_name',
-        'subject',
+        'subjects',
     ];
 }
