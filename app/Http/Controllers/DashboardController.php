@@ -3,20 +3,41 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Teacher;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Student;
+use App\Models\Course;
+use App\Models\Teacher;
+use App\Models\Tenant;
+use App\Models\Enrollment;
 
 class DashboardController extends Controller
 {
     public function index()
-    {
+    { 
         $tenantId = Auth::user()->tenant_id;
 
-        
-        $teachers = Teacher::where('tenant_id', $tenantId)->get();
+        $schoolName = Tenant::where('tenant_id', $tenantId)->value('school_name');
+
+        $totalStudents = Student::where('tenant_id', $tenantId)->count();
+
+        $totalCourses = Course::where('tenant_id', $tenantId)->count();
+
+        $totalTeachers = Teacher::where('tenant_id', $tenantId)->count();
+
+        $totalSubjects = Teacher::where('tenant_id', $tenantId)
+            ->distinct('subjects')
+            ->count('subjects');
+
+        $totalEnrollments = Enrollment::where('tenant_id', $tenantId)->count();
 
         return Inertia::render('Dashboard', [
-            'teachers' => $teachers,
+            'schoolName' => $schoolName,
+            'totalStudents' => $totalStudents,
+            'totalCourses' => $totalCourses,
+            'totalTeachers' => $totalTeachers,
+            'totalSubjects' => $totalSubjects,
+            'totalEnrollments' => $totalEnrollments,
         ]);
     }
 }

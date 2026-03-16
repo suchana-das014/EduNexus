@@ -1,34 +1,131 @@
-import { Head } from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
-import type { BreadcrumbItem } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
+import { Users, Book, GraduationCap, BookOpen, ListChecks } from 'lucide-react';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 
-const breadcrumbs: BreadcrumbItem[] = [
+type DashboardProps = {
+    totalStudents: number;
+    totalCourses: number;
+    totalTeachers: number;
+    totalSubjects: number;
+    totalEnrollments: number;
+    schoolName?: string;
+};
+
+type StatKey = keyof DashboardProps;
+
+const stats: {
+    label: string;
+    icon: any;
+    key: StatKey;
+    description: string;
+    color: string;
+}[] = [
     {
-        title: 'Dashboard',
-        href: dashboard(),
+        label: 'Students',
+        icon: Users,
+        key: 'totalStudents',
+        description: 'Total students',
+        color: 'text-blue-500',
+    },
+    {
+        label: 'Courses',
+        icon: Book,
+        key: 'totalCourses',
+        description: 'Total courses offered',
+        color: 'text-green-500',
+    },
+    {
+        label: 'Teachers',
+        icon: GraduationCap,
+        key: 'totalTeachers',
+        description: 'Total teachers',
+        color: 'text-purple-500',
+    },
+    {
+        label: 'Subjects',
+        icon: BookOpen,
+        key: 'totalSubjects',
+        description: 'Total subjects',
+        color: 'text-yellow-500',
+    },
+    {
+        label: 'Enrollments',
+        icon: ListChecks,
+        key: 'totalEnrollments',
+        description: 'Total course enrollments',
+        color: 'text-pink-500',
     },
 ];
 
 export default function Dashboard() {
+    const pageProps = usePage<DashboardProps>().props;
+
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+
+            {/* Outer container: min-h-screen ensures desktop fits viewport, overflow-auto allows scrolling on small screens */}
+            <div className="flex min-h-screen flex-col overflow-auto bg-gradient-to-br from-blue-50 via-white to-pink-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-950">
+                <div className="mx-auto flex w-full max-w-7xl flex-col py-8 sm:px-6 lg:px-8">
+                    {/* Header */}
+                    <div className="mb-6">
+                        <h1 className="text-4xl font-extrabold tracking-tight text-primary drop-shadow-lg">
+                            Dashboard
+                        </h1>
+
+                        {pageProps.schoolName && (
+                            <div className="mt-1 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                                <span className="inline-block rounded-full bg-primary/10 px-4 py-1 font-bold text-primary shadow-sm dark:bg-primary/20">
+                                    {pageProps.schoolName}
+                                </span>
+                            </div>
+                        )}
+
+                        <div className="mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-blue-400 via-pink-400 to-yellow-400"></div>
                     </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+
+                    {/* Cards grid */}
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+                        {stats.map(
+                            ({
+                                label,
+                                icon: Icon,
+                                key,
+                                description,
+                                color,
+                            }) => (
+                                <Card
+                                    key={label}
+                                    className="transition-all hover:scale-105 hover:shadow-xl"
+                                >
+                                    <CardHeader className="flex items-center justify-between pb-2">
+                                        <CardTitle className="flex items-center gap-2 text-base font-semibold">
+                                            <Icon
+                                                className={`h-6 w-6 ${color}`}
+                                            />
+                                            {label}
+                                        </CardTitle>
+                                    </CardHeader>
+
+                                    <CardContent>
+                                        <div className="text-center text-4xl font-extrabold tracking-tight text-gray-900 drop-shadow dark:text-white">
+                                            {pageProps[key] ?? 0}
+                                        </div>
+                                        <CardDescription className="text-center text-base">
+                                            {description}
+                                        </CardDescription>
+                                    </CardContent>
+                                </Card>
+                            ),
+                        )}
                     </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>
             </div>
         </AppLayout>

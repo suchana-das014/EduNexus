@@ -1,5 +1,4 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
 import { usePage, router } from '@inertiajs/react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,13 +18,6 @@ interface Teacher {
     subjects?: string;
     updated_at: string;
 }
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Teachers',
-        href: '/teachers',
-    },
-];
 
 const emptyForm = {
     first_name: '',
@@ -91,55 +83,58 @@ export default function TeacherIndex() {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Card className="mt-6 p-6">
-                <div className="mb-4 flex items-center justify-between">
-                    <h1 className="text-xl font-semibold">Teachers</h1>
+        <AppLayout>
+            <Card className="mt-6 p-4 sm:p-6">
+                <div className="mb-4 flex flex-nowrap items-center justify-between">
+                    <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                        Teachers
+                    </h1>
                     <Button onClick={handleOpenAdd}>Add Teacher</Button>
                 </div>
 
-                <div className="overflow-x-auto">
-                    <table className="min-w-full rounded-lg border text-sm">
+                <div className="mb-4 h-1 w-24 rounded-full bg-gradient-to-r from-blue-400 via-pink-400 to-yellow-400"></div>
+
+                <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm dark:border-neutral-800">
+                    <table className="min-w-full divide-y divide-gray-200 text-sm dark:divide-neutral-700">
                         <thead className="bg-gray-100 dark:bg-neutral-800">
                             <tr>
-                                <th className="px-4 py-2 text-left font-semibold">
+                                <th className="px-2 py-1 text-left font-semibold sm:px-4 sm:py-2">
                                     ID
                                 </th>
-                                <th className="px-4 py-2 text-left font-semibold">
+                                <th className="px-2 py-1 text-left font-semibold sm:px-4 sm:py-2">
                                     First Name
                                 </th>
-                                <th className="px-4 py-2 text-left font-semibold">
+                                <th className="px-2 py-1 text-left font-semibold sm:px-4 sm:py-2">
                                     Last Name
                                 </th>
-                                <th className="px-4 py-2 text-left font-semibold">
+                                <th className="px-2 py-1 text-left font-semibold sm:px-4 sm:py-2">
                                     Subjects
                                 </th>
-                                <th className="px-4 py-2 text-left font-semibold">
+                                <th className="px-2 py-1 text-left font-semibold sm:px-4 sm:py-2">
                                     Actions
                                 </th>
                             </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
                             {teacherList.map((teacher) => (
                                 <tr
                                     key={teacher.teacher_id}
-                                    className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-neutral-700"
+                                    className="hover:bg-gray-50 dark:hover:bg-neutral-700"
                                 >
-                                    <td className="px-4 py-2">
+                                    <td className="px-2 py-1 sm:px-4 sm:py-2">
                                         {teacher.teacher_id}
                                     </td>
-                                    <td className="px-4 py-2">
+                                    <td className="px-2 py-1 sm:px-4 sm:py-2">
                                         {teacher.first_name}
                                     </td>
-                                    <td className="px-4 py-2">
+                                    <td className="px-2 py-1 sm:px-4 sm:py-2">
                                         {teacher.last_name}
                                     </td>
-                                    <td className="px-4 py-2">
+                                    <td className="px-2 py-1 sm:px-4 sm:py-2">
                                         {teacher.subjects}
                                     </td>
-
-                                    <td className="flex gap-2 px-4 py-2">
+                                    <td className="flex flex-col gap-2 px-2 py-1 sm:flex-row sm:px-4 sm:py-2">
                                         <Button
                                             size="sm"
                                             variant="outline"
@@ -166,7 +161,6 @@ export default function TeacherIndex() {
                 </div>
             </Card>
 
-            {/* Dialog for add/edit */}
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -175,8 +169,11 @@ export default function TeacherIndex() {
                         </DialogTitle>
                     </DialogHeader>
 
-                    <form onSubmit={handleSubmit} className="grid gap-4">
-                        <div>
+                    <form
+                        onSubmit={handleSubmit}
+                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                    >
+                        <div className="col-span-1">
                             <label htmlFor="first_name">First Name</label>
                             <input
                                 type="text"
@@ -189,7 +186,7 @@ export default function TeacherIndex() {
                             />
                         </div>
 
-                        <div>
+                        <div className="col-span-1">
                             <label htmlFor="last_name">Last Name</label>
                             <input
                                 type="text"
@@ -202,7 +199,7 @@ export default function TeacherIndex() {
                             />
                         </div>
 
-                        <div>
+                        <div className="col-span-1 sm:col-span-2">
                             <label htmlFor="subjects">Subjects</label>
                             <input
                                 type="text"
@@ -215,7 +212,7 @@ export default function TeacherIndex() {
                             />
                         </div>
 
-                        <div className="flex justify-end gap-2">
+                        <div className="col-span-1 flex justify-end gap-2 sm:col-span-2">
                             <Button
                                 type="button"
                                 variant="outline"
